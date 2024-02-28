@@ -1,7 +1,7 @@
 package book.store.repository;
 
-import java.util.List;
 import book.store.model.Book;
+import java.util.List;
 
 public interface BookRepository {
     Book save(Book book);
