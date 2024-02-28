@@ -45,7 +45,7 @@ public class BookRepositoryImpl implements BookRepository {
     public List<Book> findAll() {
         try (Session session = sessionFactory.openSession()) {
             Query<Book> getAllBooksQuery = session.createQuery(
-                    "FROM book", Book.class);
+                    "FROM Book", Book.class);
             return getAllBooksQuery.getResultList();
         } catch (Exception e) {
             throw new RuntimeException("Can`t get all books from db: ", e);

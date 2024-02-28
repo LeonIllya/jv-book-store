@@ -18,10 +18,11 @@ public class BookStoreApplication {
     }
 
     @Bean
-    public CommandLineRunner commandLineRunner () {
+    public CommandLineRunner commandLineRunner() {
         return args -> {
             Book fairyTale = new Book();
-            fairyTale.setId();
+            fairyTale.setId(1L);
+            fairyTale.setAuthor("Shevchenko");
 
             bookService.save(fairyTale);
 
