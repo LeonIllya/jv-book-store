@@ -4,7 +4,9 @@ import book.store.model.Book;
 import java.util.List;
 
 public interface BookRepository {
-    Book save(Book book);
+    Book createBook(Book book);
 
-    List<Book> findAll();
+    Book getBookById(Long id);
+
+    List<Book> getAll();
 }
