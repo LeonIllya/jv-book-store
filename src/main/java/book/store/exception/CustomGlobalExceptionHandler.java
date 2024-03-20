@@ -17,6 +17,10 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 @ControllerAdvice
 public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler {
+    private static final String TIMESTAMP_PARAM = "timestamp";
+    private static final String HTTP_STATUS_PARAM = "http_status";
+    private static final String ERRORS_PARAM = "errors";
+
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(
             MethodArgumentNotValidException ex,
@@ -25,17 +29,19 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
             WebRequest request
     ) {
         Map<String, Object> body = new LinkedHashMap<>();
-        body.put("timestamp", LocalDateTime.now());
-        body.put("status", HttpStatus.BAD_REQUEST);
+        body.put(TIMESTAMP_PARAM, LocalDateTime.now());
+        body.put(HTTP_STATUS_PARAM, HttpStatus.BAD_REQUEST);
+        body.put(ERRORS_PARAM, getListOfErrors(ex));
 
-        List<String> errorStack = ex.getBindingResult()
+        return new ResponseEntity<>(body, headers, status);
+    }
+
+    private List<String> getListOfErrors(MethodArgumentNotValidException ex) {
+        return ex.getBindingResult()
                 .getAllErrors()
                 .stream()
-                .map(error -> getErrorMessage(error))
+                .map(this::getErrorMessage)
                 .toList();
-
-        body.put("errors", errorStack);
-        return new ResponseEntity<>(body, headers, status);
     }
 
     private String getErrorMessage(ObjectError e) {
