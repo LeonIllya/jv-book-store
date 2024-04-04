@@ -20,7 +20,7 @@ public class UserServiceImpl implements UserService {
     public UserResponseDto register(UserRegistrationRequestDto requestDto)
             throws RegistrationException {
         if (userRepository.findByEmail(requestDto.getEmail()).isPresent()) {
-            throw new RegistrationException("Can`t register User");
+            throw new RegistrationException("Can`t register User by email. This email is used");
         }
         User model = userMapper.toModel(requestDto);
         User savedUser = userRepository.save(model);
