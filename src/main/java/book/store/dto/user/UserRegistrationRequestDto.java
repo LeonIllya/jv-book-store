@@ -16,6 +16,8 @@ public class UserRegistrationRequestDto {
     @NotBlank(message = "Please write your password")
     @Length(min = 10, max = 50)
     private String password;
+    @Length(min = 10, max = 50)
+    private String repeatPassword;
     @NotBlank(message = "Please write your firstName")
     @Length(min = 1, max = 50)
     private String firstName;

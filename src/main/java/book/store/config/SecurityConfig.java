@@ -24,9 +24,9 @@ public class SecurityConfig {
         return http
             .cors(AbstractHttpConfigurer::disable)
             .csrf(AbstractHttpConfigurer::disable)
-            .authorizeHttpRequests(
-                auth -> auth.requestMatchers("/auth/**", "/error", "/swagger-ui/**")
-                .permitAll().anyRequest().authenticated()
+            .authorizeHttpRequests(auth -> auth
+                    .requestMatchers("/auth/**", "/error", "/swagger-ui/**").permitAll()
+                    .anyRequest().authenticated()
             ).httpBasic(withDefaults())
             .userDetailsService(userDetailsService)
             .build();

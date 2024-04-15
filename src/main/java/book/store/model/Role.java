@@ -19,11 +19,11 @@ public class Role implements GrantedAuthority {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, unique = true, columnDefinition = "VARCHAR(30)")
-    private RoleName role;
+    private RoleName name;
 
     @Override
     public String getAuthority() {
-        return role.toString();
+        return name.toString();
     }
 
     public enum RoleName {

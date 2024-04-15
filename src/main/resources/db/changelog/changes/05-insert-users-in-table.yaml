@@ -6,16 +6,16 @@ databaseChangeLog:
         - insert:
             tableName: users
             columns:
-              - column: { name: email, value: "admin@gmail.com" }
-              - column: { name: password, value: "12345" }
+              - column: { name: email, value: "admin1@gmail.com" }
+              - column: { name: password, value: "$2a$10$zwE7/e4b0WxpHlkCHqzoiO0gVJOn0AtQWBHbdFUe6Dqk84Aq1/j26" }
               - column: { name: first_name, value: "Danil" }
               - column: { name: last_name, value: "Zinchenko" }
               - column: { name: shipping_address, value: "Mayakovsky 50-A" }
         - insert:
             tableName: users
             columns:
-              - column: { name: email, value: "user@gmail.com" }
-              - column: { name: password, value: "678910" }
+              - column: { name: email, value: "admin2@gmail.com" }
+              - column: { name: password, value: "$2a$10$cmfXJqqnStMWoQIz3qyd5Ol8hIXW.EuhWyEjaXRqpn4NUSsXXghmy" }
               - column: { name: first_name, value: "Andrey" }
               - column: { name: last_name, value: "Zub" }
               - column: { name: shipping_address, value: "Mayakovsky 10-C" }
