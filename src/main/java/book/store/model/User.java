@@ -12,6 +12,7 @@ import java.util.Collection;
 import java.util.Set;
 import lombok.Data;
 import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.SQLRestriction;
 import org.hibernate.annotations.Where;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -20,6 +21,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 @Entity(name = "users")
 @Data
 @SQLDelete(sql = "UPDATE users SET is_deleted = true WHERE id=?")
+@SQLRestriction(value = "is_deleted = false")
 @Where(clause = "is_deleted=false")
 public class User implements UserDetails {
     @Id
