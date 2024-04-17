@@ -24,6 +24,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 @SQLRestriction(value = "is_deleted = false")
 @Where(clause = "is_deleted=false")
 public class User implements UserDetails {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -37,6 +38,7 @@ public class User implements UserDetails {
     @Column(nullable = false)
     private String lastName;
     private String shippingAddress;
+
 
     @ManyToMany
     @JoinTable(
