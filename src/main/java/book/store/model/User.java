@@ -39,7 +39,6 @@ public class User implements UserDetails {
     private String lastName;
     private String shippingAddress;
 
-
     @ManyToMany
     @JoinTable(
             name = "users_roles",
