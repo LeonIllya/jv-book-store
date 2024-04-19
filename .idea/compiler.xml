@@ -16,4 +16,6 @@
       <module name="jv-online-book-store" options="-parameters" />
     </option>
   </component>
+    </annotationProcessing>
+  </component>
 </project>
