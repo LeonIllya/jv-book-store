@@ -24,7 +24,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 @Entity(name = "users")
 @Getter
 @Setter
-@EqualsAndHashCode
+@EqualsAndHashCode(of = {"id"})
 @ToString
 @SQLDelete(sql = "UPDATE users SET is_deleted = true WHERE id=?")
 @SQLRestriction(value = "is_deleted = false")
