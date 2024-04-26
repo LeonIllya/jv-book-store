@@ -23,9 +23,9 @@ public interface BookMapper {
     @AfterMapping
     default void setCategoryIds(@MappingTarget BookDto bookDto, Book book) {
         Set<Long> categoryId = book.getCategories()
-            .stream()
-            .map(Category::getId)
-            .collect(Collectors.toSet());
+                .stream()
+                .map(Category::getId)
+                .collect(Collectors.toSet());
         bookDto.setCategoryIds(categoryId);
     }
 
