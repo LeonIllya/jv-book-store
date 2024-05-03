@@ -28,5 +28,4 @@ public interface BookMapper {
                 .collect(Collectors.toSet());
         bookDto.setCategoryIds(categoryId);
     }
-
 }
