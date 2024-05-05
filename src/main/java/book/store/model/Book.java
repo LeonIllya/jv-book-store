@@ -17,7 +17,7 @@ import lombok.Setter;
 import lombok.ToString;
 import org.apache.commons.lang3.builder.ToStringExclude;
 import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.Where;
+import org.hibernate.annotations.SQLRestriction;
 
 @Getter
 @Setter
@@ -25,7 +25,7 @@ import org.hibernate.annotations.Where;
 @ToString
 @Entity(name = "books")
 @SQLDelete(sql = "UPDATE books SET is_deleted = true WHERE id=?")
-@Where(clause = "is_deleted=false")
+@SQLRestriction(value = "is_deleted = false")
 public class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

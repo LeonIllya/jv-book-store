@@ -1,13 +1,8 @@
 package book.store.service;
 
 import book.store.dto.cartitem.CartItemDto;
-import book.store.dto.cartitem.CreateCartItemRequestDto;
-import book.store.dto.shoppingcart.ShoppingCartDto;
+import book.store.model.ShoppingCart;
 
 public interface CartItemService {
-    CartItemDto addBookInShoppingCart(ShoppingCartDto cartDto, CreateCartItemRequestDto requestDto);
-
-    void deleteBookById(Long cartId);
-
-    void updateQuantity(Long cartId, int quantity);
+    CartItemDto getCartItemById(Long cartId, ShoppingCart shoppingCart);
 }
