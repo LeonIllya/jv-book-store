@@ -23,7 +23,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
     @Override
     public ShoppingCartDto addBookInShoppingCart(Long userId, CartItemRequestDto requestDto) {
-        ShoppingCart userShoppingCart = shoppingCartRepository.findByUserId(userId);
+        ShoppingCart userShoppingCart = shoppingCartRepository.getUserById(userId);
         CartItem model = cartItemMapper.toModel(requestDto);
         cartItemRepository.save(model);
         userShoppingCart.getCartItems().add(model);
@@ -32,8 +32,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
     @Override
     public void updateQuantity(String email, Long cartItemId, int quantity) {
-        CartItem cartItem = cartItemRepository.findById(cartItemId).orElseThrow(() ->
-            new EntityNotFoundException("Can`t find cart item by id: " + cartItemId));
+        CartItem cartItem = findCartItemById(cartItemId);
 
         if (cartItem.getShoppingCart().getUser().getEmail().equals(email)) {
             cartItem.setQuantity(quantity);
@@ -42,9 +41,8 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     }
 
     @Override
-    public void deleteBookById(Long cartId, String userEmail) {
-        CartItem cartItem = cartItemRepository.findById(cartId).orElseThrow(() ->
-            new EntityNotFoundException("Can`t find cart item by id: " + cartId));
+    public void deleteBookById(Long cartItemId, String userEmail) {
+        CartItem cartItem = findCartItemById(cartItemId);
 
         if (cartItem.getShoppingCart().getUser().getEmail().equals(userEmail)) {
             cartItemRepository.deleteById(cartItem.getId());
@@ -53,7 +51,12 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
     @Override
     public ShoppingCartDto getShoppingCart(Long userId) {
-        ShoppingCart byUserId = shoppingCartRepository.findByUserId(userId);
+        ShoppingCart byUserId = shoppingCartRepository.getUserById(userId);
         return shoppingCartMapper.toDto(byUserId);
+    }
+
+    private CartItem findCartItemById(Long cartItemId) {
+        return cartItemRepository.findById(cartItemId).orElseThrow(() ->
+            new EntityNotFoundException("Can`t find cart item by id: " + cartItemId));
     }
 }

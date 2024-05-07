@@ -11,6 +11,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.MapsId;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
 import java.util.Set;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -23,15 +24,16 @@ import org.hibernate.annotations.SQLRestriction;
 @Setter
 @EqualsAndHashCode(of = {"id"})
 @ToString
-@Entity(name = "shopping_carts")
+@Entity
 @SQLDelete(sql = "UPDATE shopping_carts SET is_deleted = true WHERE id=?")
 @SQLRestriction(value = "is_deleted = false")
+@Table(name = "shopping_carts")
 public class ShoppingCart {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(nullable = false)
     @MapsId
     private User user;
     @OneToMany(mappedBy = "shoppingCart", cascade = CascadeType.ALL, orphanRemoval = true)
