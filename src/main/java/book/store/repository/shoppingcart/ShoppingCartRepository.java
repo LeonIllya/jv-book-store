@@ -7,5 +7,5 @@ import org.springframework.data.repository.query.Param;
 
 public interface ShoppingCartRepository extends JpaRepository<ShoppingCart, Long> {
     @Query("SELECT sc FROM ShoppingCart sc WHERE sc.user.id = :id")
-    ShoppingCart getUserById(@Param("id") Long userId);
+    ShoppingCart findByUserId(@Param("id") Long userId);
 }

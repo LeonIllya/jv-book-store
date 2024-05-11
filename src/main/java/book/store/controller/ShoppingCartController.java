@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,7 +29,8 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "Shopping cart management", description = "Endpoint for managing shopping cart")
 @RequiredArgsConstructor
 @RestController
-@RequestMapping(value = "/cart")
+@Validated
+@RequestMapping("/cart")
 public class ShoppingCartController {
     private final ShoppingCartService shoppingCartService;
     private final CartItemService cartItemService;
@@ -50,12 +52,11 @@ public class ShoppingCartController {
 
     @PutMapping("/cart-items/{cartItemId}")
     @PreAuthorize("hasRole('USER')")
-    public void updateQuantity(Authentication authentication,
+    public ShoppingCartDto updateQuantity(Authentication authentication,
                                             @PathVariable @Positive Long cartItemId,
                                             @RequestBody @Valid UpdateCartItemDto item) {
-
         User user = (User) authentication.getPrincipal();
-        shoppingCartService.updateQuantity(user.getEmail(), cartItemId, item.getQuantity());
+        return shoppingCartService.updateQuantity(user.getId(), cartItemId, item);
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -64,7 +65,7 @@ public class ShoppingCartController {
     public void deleteBookById(Authentication authentication,
                                 @PathVariable @Positive Long cartItemId) {
         User user = (User) authentication.getPrincipal();
-        shoppingCartService.deleteBookById(cartItemId, user.getEmail());
+        shoppingCartService.deleteBookById(cartItemId, user.getId());
     }
 
     @GetMapping("/cart-items/{cartItemId}")
