@@ -11,7 +11,6 @@ import org.hibernate.validator.constraints.Length;
 
 @Data
 public class CreateBookRequestDto {
-    private Long id;
     @NotBlank(message = "Please write the title of the book ")
     @Length(min = 3, max = 50)
     private String title;
