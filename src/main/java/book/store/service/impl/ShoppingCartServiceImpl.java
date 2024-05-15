@@ -41,13 +41,8 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
             return shoppingCartMapper.toDto(userShoppingCart);
         }
 
-        CartItem cartItemWithoutNewQuantity = userShoppingCart.getCartItems().stream()
-                .filter(cartItemBook -> cartItemBook.getBook().getId()
-                .equals(requestDto.getBookId()))
-                .findFirst()
-                .orElseThrow(() ->
-                    new EntityNotFoundException("Can`t find cart item by id "
-                        + requestDto.getBookId()));
+        CartItem cartItemWithoutNewQuantity = cartItemByBookId.orElseThrow(() ->
+            new EntityNotFoundException("Can`t find cart item by id: " + requestDto.getBookId()));
 
         int oldQuantity = cartItemWithoutNewQuantity.getQuantity();
         cartItemRepository.delete(cartItemWithoutNewQuantity);
