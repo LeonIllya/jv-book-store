@@ -4,7 +4,6 @@ import book.store.dto.cartitem.CartItemDto;
 import book.store.dto.cartitem.CartItemRequestDto;
 import book.store.dto.cartitem.UpdateCartItemDto;
 import book.store.dto.shoppingcart.ShoppingCartDto;
-import book.store.model.ShoppingCart;
 import book.store.model.User;
 import book.store.service.CartItemService;
 import book.store.service.ShoppingCartService;
@@ -72,7 +71,7 @@ public class ShoppingCartController {
     @PreAuthorize("hasRole('USER')")
     public CartItemDto getCartItemByCartId(Authentication authentication,
                                            @PathVariable @Positive Long cartItemId) {
-        ShoppingCart shoppingCart = (ShoppingCart) authentication.getPrincipal();
-        return cartItemService.getCartItemById(cartItemId, shoppingCart);
+        User user = (User) authentication.getPrincipal();
+        return cartItemService.getCartItemById(cartItemId, user.getId());
     }
 }

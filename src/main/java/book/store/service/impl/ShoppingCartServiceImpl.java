@@ -30,24 +30,20 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         ShoppingCart userShoppingCart = getShoppingCartByUserId(userId);
         CartItem cartItem = cartItemMapper.toModel(requestDto);
 
-        Optional<CartItem> cartItemByBookId = userShoppingCart.getCartItems().stream()
-                .filter(cartItemBook -> cartItemBook.getBook().getId()
-                .equals(requestDto.getBookId()))
-                .findFirst();
+        Optional<CartItem> cartItemByBookId = getCartItemByBookId(userShoppingCart,
+                requestDto.getBookId());
 
         if (cartItemByBookId.isEmpty()) {
-            cartItemRepository.save(cartItem);
-            userShoppingCart.getCartItems().add(cartItem);
+            createNewCartItemInShoppingCart(userShoppingCart, cartItem);
             return shoppingCartMapper.toDto(userShoppingCart);
         }
 
         CartItem cartItemWithoutNewQuantity = cartItemByBookId.orElseThrow(() ->
             new EntityNotFoundException("Can`t find cart item by id: " + requestDto.getBookId()));
 
-        int oldQuantity = cartItemWithoutNewQuantity.getQuantity();
+        cartItem.setQuantity(cartItem.getQuantity() + cartItemWithoutNewQuantity.getQuantity());
         cartItemRepository.delete(cartItemWithoutNewQuantity);
-        cartItem.setQuantity(cartItem.getQuantity() + oldQuantity);
-        cartItemRepository.save(cartItem);
+        createNewCartItemInShoppingCart(userShoppingCart, cartItem);
         return shoppingCartMapper.toDto(userShoppingCart);
     }
 
@@ -89,5 +85,16 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         return shoppingCartRepository.findByUserId(userId)
                 .orElseThrow(() -> new EntityNotFoundException(
                         "Can`t find a shopping cart by user id: " + userId));
+    }
+
+    private Optional<CartItem> getCartItemByBookId(ShoppingCart shoppingCart, Long bookId) {
+        return shoppingCart.getCartItems().stream()
+                .filter(cartItemBook -> cartItemBook.getBook().getId().equals(bookId))
+                .findFirst();
+    }
+
+    private void createNewCartItemInShoppingCart(ShoppingCart shoppingCart, CartItem cartItem) {
+        cartItemRepository.save(cartItem);
+        shoppingCart.getCartItems().add(cartItem);
     }
 }
