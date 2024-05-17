@@ -30,9 +30,9 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     @Override
     public ShoppingCartDto addBookInShoppingCart(Long userId, CartItemRequestDto requestDto) {
         Book book = bookRepository.findById(requestDto.getBookId())
-            .orElseThrow(() -> new EntityNotFoundException(
-                String.format("Book with id: %d is not found", requestDto.getBookId())
-            ));
+                .orElseThrow(() -> new EntityNotFoundException(
+                    String.format("Book with id: %d is not found", requestDto.getBookId())
+                ));
 
         ShoppingCart shoppingCart = shoppingCartRepository.findByUserId(userId)
                 .orElseThrow(() ->
@@ -42,7 +42,8 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         shoppingCart.getCartItems().stream()
                 .filter(item -> item.getBook().getId().equals(requestDto.getBookId()))
                 .findFirst()
-                .ifPresentOrElse(item -> item.setQuantity(item.getQuantity() + requestDto.getQuantity()),
+                .ifPresentOrElse(item -> item.setQuantity(item.getQuantity()
+                            + requestDto.getQuantity()),
                         () -> addCartItemToCart(requestDto, book, shoppingCart));
         shoppingCartRepository.save(shoppingCart);
         return shoppingCartMapper.toDto(shoppingCart);
