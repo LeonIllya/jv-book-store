@@ -1,10 +1,10 @@
 package book.store.dto.cartitem;
 
-import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.Positive;
 import lombok.Data;
 
 @Data
 public class UpdateCartItemDto {
-    @Min(1)
+    @Positive
     private int quantity;
 }

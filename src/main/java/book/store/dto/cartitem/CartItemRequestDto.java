@@ -1,13 +1,13 @@
 package book.store.dto.cartitem;
 
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import lombok.Data;
 
 @Data
 public class CartItemRequestDto {
-    @NotBlank(message = "Please write the book id ")
+    @NotNull
     private Long bookId;
-    @Min(1)
+    @Positive
     private int quantity;
 }
