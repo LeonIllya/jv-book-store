@@ -35,14 +35,12 @@ public class ShoppingCartController {
     private final CartItemService cartItemService;
 
     @GetMapping
-    @PreAuthorize("hasRole('USER')")
     public ShoppingCartDto getShoppingCart(Authentication authentication) {
         User user = (User) authentication.getPrincipal();
         return shoppingCartService.getShoppingCart(user.getId());
     }
 
     @PostMapping
-    @PreAuthorize("hasRole('USER')")
     public ShoppingCartDto addBook(@RequestBody @Valid CartItemRequestDto cartItemRequestDto,
                                    Authentication authentication) {
         User user = (User) authentication.getPrincipal();
@@ -50,7 +48,6 @@ public class ShoppingCartController {
     }
 
     @PutMapping("/cart-items/{cartItemId}")
-    @PreAuthorize("hasRole('USER')")
     public ShoppingCartDto updateQuantity(Authentication authentication,
                                           @PathVariable @Positive Long cartItemId,
                                           @RequestBody @Valid UpdateCartItemDto item) {
@@ -60,7 +57,6 @@ public class ShoppingCartController {
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/cart-items/{cartItemId}")
-    @PreAuthorize("hasRole('USER')")
     public void deleteBookById(Authentication authentication,
                                @PathVariable @Positive Long cartItemId) {
         User user = (User) authentication.getPrincipal();
