@@ -5,7 +5,6 @@ import book.store.exception.EntityNotFoundException;
 import book.store.mapper.CartItemMapper;
 import book.store.model.CartItem;
 import book.store.model.ShoppingCart;
-import book.store.repository.shoppingcart.ShoppingCartRepository;
 import book.store.service.CartItemService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -14,13 +13,11 @@ import org.springframework.stereotype.Service;
 @Service
 public class CartItemServiceImpl implements CartItemService {
     private final CartItemMapper cartItemMapper;
-    private final ShoppingCartRepository shoppingCartRepository;
+    private final ShoppingCartServiceImpl shoppingCartService;
 
     @Override
     public CartItemDto getCartItemById(Long cartId, Long userId) {
-        ShoppingCart shoppingCart = shoppingCartRepository.findByUserId(userId)
-                .orElseThrow(() ->
-                    new EntityNotFoundException("Can`t find a user by id: " + userId));
+        ShoppingCart shoppingCart = shoppingCartService.getShoppingCartByUserId(userId);
 
         CartItem cartItem = getCartItemByShoppingCart(shoppingCart, cartId);
 

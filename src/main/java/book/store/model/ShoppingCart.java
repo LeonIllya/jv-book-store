@@ -16,17 +16,15 @@ import java.util.Set;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 
 @Getter
 @Setter
 @EqualsAndHashCode(of = {"id"})
-@ToString
 @Entity
-@SQLDelete(sql = "UPDATE shopping_carts SET is_deleted = true WHERE id=?")
-@SQLRestriction(value = "is_deleted = false")
+@SQLDelete(sql = "UPDATE shopping_carts SET is_deleted = TRUE WHERE id=?")
+@SQLRestriction(value = "is_deleted = FALSE")
 @Table(name = "shopping_carts")
 public class ShoppingCart {
     @Id

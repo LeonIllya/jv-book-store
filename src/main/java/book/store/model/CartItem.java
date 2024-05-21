@@ -11,14 +11,12 @@ import jakarta.persistence.ManyToOne;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 
 @Getter
 @Setter
 @EqualsAndHashCode(of = {"id"})
-@ToString
 @Entity(name = "cart_items")
 @SQLDelete(sql = "UPDATE cart_items SET is_deleted = true WHERE id=?")
 @SQLRestriction(value = "is_deleted = false")

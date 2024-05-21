@@ -37,15 +37,14 @@ public class ShoppingCartController {
     @GetMapping
     @PreAuthorize("hasRole('USER')")
     public ShoppingCartDto getShoppingCart(Authentication authentication) {
-        User user = (User) authentication.getPrincipal();
+        User user = getUser(authentication);
         return shoppingCartService.getShoppingCart(user.getId());
     }
 
     @PostMapping
-    @PreAuthorize("hasRole('USER')")
     public ShoppingCartDto addBook(@RequestBody @Valid CartItemRequestDto cartItemRequestDto,
                                    Authentication authentication) {
-        User user = (User) authentication.getPrincipal();
+        User user = getUser(authentication);
         return shoppingCartService.addBookInShoppingCart(user.getId(), cartItemRequestDto);
     }
 
@@ -54,7 +53,7 @@ public class ShoppingCartController {
     public ShoppingCartDto updateQuantity(Authentication authentication,
                                           @PathVariable @Positive Long cartItemId,
                                           @RequestBody @Valid UpdateCartItemDto item) {
-        User user = (User) authentication.getPrincipal();
+        User user = getUser(authentication);
         return shoppingCartService.updateQuantity(user.getId(), cartItemId, item);
     }
 
@@ -63,7 +62,7 @@ public class ShoppingCartController {
     @PreAuthorize("hasRole('USER')")
     public void deleteBookById(Authentication authentication,
                                @PathVariable @Positive Long cartItemId) {
-        User user = (User) authentication.getPrincipal();
+        User user = getUser(authentication);
         shoppingCartService.deleteBookById(cartItemId, user.getId());
     }
 
@@ -71,7 +70,11 @@ public class ShoppingCartController {
     @PreAuthorize("hasRole('USER')")
     public CartItemDto getCartItemByCartId(Authentication authentication,
                                            @PathVariable @Positive Long cartItemId) {
-        User user = (User) authentication.getPrincipal();
+        User user = getUser(authentication);
         return cartItemService.getCartItemById(cartItemId, user.getId());
+    }
+
+    private User getUser(Authentication authentication) {
+        return (User) authentication.getPrincipal();
     }
 }
