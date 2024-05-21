@@ -42,6 +42,7 @@ public class ShoppingCartController {
     }
 
     @PostMapping
+    @PreAuthorize("hasRole('USER')")
     public ShoppingCartDto addBook(@RequestBody @Valid CartItemRequestDto cartItemRequestDto,
                                    Authentication authentication) {
         User user = getUser(authentication);
