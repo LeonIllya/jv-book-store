@@ -1,8 +1,7 @@
 package book.store.dto.book;
 
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import java.math.BigDecimal;
 import java.util.Set;
 import lombok.Data;
@@ -19,9 +18,7 @@ public class CreateBookRequestDto {
     @NotBlank
     @ISBN
     private String isbn;
-    @NotNull(message = "Please write the price of the book ")
-    @Length(min = 3)
-    @Min(0)
+    @Positive
     private BigDecimal price;
     @NotBlank
     private String description;
