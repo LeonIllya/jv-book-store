@@ -88,9 +88,7 @@ public class OrderServiceImpl implements OrderService {
                 .orElseThrow(() -> new EntityNotFoundException(
                     "Can`t find an order by id: " + orderId));
 
-        OrderItem orderItem = orderItemRepository.findByOrderIdAndOrderItemId(order.getId(), itemId)
-                .orElseThrow(() -> new EntityNotFoundException(
-                    "Can`t find an order item by id: " + itemId));
+        OrderItem orderItem = getOrderItem(order, itemId);
         return orderItemMapper.toDto(orderItem);
     }
 
@@ -110,6 +108,14 @@ public class OrderServiceImpl implements OrderService {
         return shoppingCartRepository.findByUserId(userId)
                 .orElseThrow(() -> new EntityNotFoundException(
                     "Can`t find a shopping cart by user id: " + userId));
+    }
+
+    private OrderItem getOrderItem(Order order, Long itemId) {
+        return order.getOrderItems().stream()
+                .filter(item -> item.getId().equals(itemId))
+                .findFirst()
+                .orElseThrow(() -> new EntityNotFoundException(
+                    "Can`t find an order item by id: " + itemId));
     }
 
     private Order createOrder(User user, BigDecimal total,
