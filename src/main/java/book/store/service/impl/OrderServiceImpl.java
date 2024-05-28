@@ -3,7 +3,9 @@ package book.store.service.impl;
 import book.store.dto.order.OrderDto;
 import book.store.dto.order.PlaceOrderRequestDto;
 import book.store.dto.order.UpdateStatusOrderDto;
+import book.store.dto.orderitem.OrderItemDto;
 import book.store.exception.EntityNotFoundException;
+import book.store.mapper.OrderItemMapper;
 import book.store.mapper.OrderMapper;
 import book.store.model.CartItem;
 import book.store.model.Order;
@@ -18,6 +20,7 @@ import book.store.service.OrderService;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -32,6 +35,7 @@ public class OrderServiceImpl implements OrderService {
     private final ShoppingCartRepository shoppingCartRepository;
     private final OrderItemRepository orderItemRepository;
     private final OrderMapper orderMapper;
+    private final OrderItemMapper orderItemMapper;
 
     @Transactional
     @Override
@@ -53,11 +57,11 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Set<OrderDto> getOrderHistory(Long userId) {
+    public List<OrderDto> getOrderHistory(Long userId) {
         Set<Order> ordersByUserId = orderRepository.findOrdersByUserId(userId);
         return ordersByUserId.stream()
                 .map(orderMapper::toDto)
-                .collect(Collectors.toSet());
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -68,6 +72,33 @@ public class OrderServiceImpl implements OrderService {
         order.setStatus(Order.Status.valueOf(updateStatusOrderDto.status()));
         orderRepository.save(order);
         return orderMapper.toDto(order);
+    }
+
+    @Override
+    public List<OrderItemDto> findOrderItemsByOrder(Long orderId, Long userId) {
+        Order orderById = getOrderById(orderId, userId);
+        return orderById.getOrderItems().stream()
+            .map(orderItemMapper::toDto)
+            .collect(Collectors.toList());
+    }
+
+    @Override
+    public OrderItemDto findOrderItemById(Long orderId, Long itemId, Long userId) {
+        Order order = orderRepository.findOrderByOrderIdAndUserId(orderId, userId)
+                .orElseThrow(() -> new EntityNotFoundException(
+                    "Can`t find an order by id: " + orderId));
+
+        OrderItem orderItem = orderItemRepository.findByOrderIdAndOrderItemId(order.getId(), itemId)
+                .orElseThrow(() -> new EntityNotFoundException(
+                    "Can`t find an order item by id: " + itemId));
+        return orderItemMapper.toDto(orderItem);
+    }
+
+    private Order getOrderById(Long orderId, Long userId) {
+        return orderRepository.findById(orderId).filter(order -> order.getUser().getId()
+                    .equals(userId))
+            .orElseThrow(() -> new EntityNotFoundException(
+                "Can`t find an order by id: " + orderId));
     }
 
     private User getUserById(Long userId) {

@@ -17,12 +17,13 @@ databaseChangeLog:
                   name: user_id
                   type: bigint
                   constraints:
+                    optional: false
                     nullable: false
                     references: users(id)
                     foreignKeyName: fk_orders_user_id
               - column:
                   name: status
-                  type: tinyint
+                  type: varchar(255)
                   constraints:
                     nullable: false
               - column:

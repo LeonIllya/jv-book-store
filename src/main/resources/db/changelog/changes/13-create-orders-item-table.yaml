@@ -17,6 +17,7 @@ databaseChangeLog:
                   name: order_id
                   type: bigint
                   constraints:
+                    optional: false
                     nullable: false
                     references: orders(id)
                     foreignKeyName: fk_order_items_order_id
