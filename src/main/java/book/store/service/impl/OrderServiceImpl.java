@@ -22,7 +22,6 @@ import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -61,9 +60,10 @@ public class OrderServiceImpl implements OrderService {
         Set<Order> ordersByUserId = orderRepository.findOrdersByUserId(userId);
         return ordersByUserId.stream()
                 .map(orderMapper::toDto)
-                .collect(Collectors.toList());
+                .toList();
     }
 
+    @Transactional
     @Override
     public OrderDto updateStatusOrder(Long orderId, UpdateStatusOrderDto updateStatusOrderDto) {
         Order order = orderRepository.findById(orderId)
@@ -78,8 +78,8 @@ public class OrderServiceImpl implements OrderService {
     public List<OrderItemDto> findOrderItemsByOrder(Long orderId, Long userId) {
         Order orderById = getOrderById(orderId, userId);
         return orderById.getOrderItems().stream()
-            .map(orderItemMapper::toDto)
-            .collect(Collectors.toList());
+                .map(orderItemMapper::toDto)
+                .toList();
     }
 
     @Override
