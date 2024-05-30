@@ -11,15 +11,11 @@ import book.store.model.CartItem;
 import book.store.model.Order;
 import book.store.model.OrderItem;
 import book.store.model.ShoppingCart;
-import book.store.model.User;
 import book.store.repository.order.OrderRepository;
 import book.store.repository.orderitem.OrderItemRepository;
 import book.store.repository.shoppingcart.ShoppingCartRepository;
-import book.store.repository.user.UserRepository;
 import book.store.service.OrderService;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +26,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class OrderServiceImpl implements OrderService {
     private final OrderRepository orderRepository;
-    private final UserRepository userRepository;
     private final ShoppingCartRepository shoppingCartRepository;
     private final OrderItemRepository orderItemRepository;
     private final OrderMapper orderMapper;
@@ -39,8 +34,6 @@ public class OrderServiceImpl implements OrderService {
     @Transactional
     @Override
     public OrderDto getOrderByPlace(Long userId, PlaceOrderRequestDto placeOrderRequestDto) {
-        User user = getUserById(userId);
-
         ShoppingCart shoppingCart = getShoppingCartByUserId(userId);
 
         BigDecimal total = null;
@@ -48,9 +41,7 @@ public class OrderServiceImpl implements OrderService {
             total.add(cartItem.getBook().getPrice()
                     .multiply(BigDecimal.valueOf(cartItem.getQuantity())));
         }
-
-        Order order = createOrder(user, total, placeOrderRequestDto.shippingAddress(),
-                shoppingCart);
+        Order order = orderMapper.createOrder(shoppingCart, placeOrderRequestDto);
 
         return orderMapper.toDto(order);
     }
@@ -99,11 +90,6 @@ public class OrderServiceImpl implements OrderService {
                 "Can`t find an order by id: " + orderId));
     }
 
-    private User getUserById(Long userId) {
-        return userRepository.findById(userId)
-            .orElseThrow(() -> new EntityNotFoundException("Can`t fina a user by id: " + userId));
-    }
-
     private ShoppingCart getShoppingCartByUserId(Long userId) {
         return shoppingCartRepository.findByUserId(userId)
                 .orElseThrow(() -> new EntityNotFoundException(
@@ -116,36 +102,5 @@ public class OrderServiceImpl implements OrderService {
                 .findFirst()
                 .orElseThrow(() -> new EntityNotFoundException(
                     "Can`t find an order item by id: " + itemId));
-    }
-
-    private Order createOrder(User user, BigDecimal total,
-                                String shippingAddress, ShoppingCart shoppingCart) {
-        Order order = new Order();
-        order.setUser(user);
-        order.setShippingAddress(shippingAddress);
-        order.setStatus(Order.Status.PENDING);
-        order.setOrderDate(LocalDateTime.now());
-        order.setTotal(total);
-
-        Set<OrderItem> orderItems = createOrderItems(shoppingCart, order);
-        order.setOrderItems(orderItems);
-
-        orderRepository.save(order);
-        return order;
-    }
-
-    private Set<OrderItem> createOrderItems(ShoppingCart shoppingCart, Order order) {
-        Set<OrderItem> orderItems = new HashSet<>();
-        for (CartItem cartItem : shoppingCart.getCartItems()) {
-            OrderItem orderItem = new OrderItem();
-            orderItem.setOrder(order);
-            orderItem.setBook(cartItem.getBook());
-            orderItem.setQuantity(cartItem.getQuantity());
-            orderItem.setPrice(cartItem.getBook().getPrice());
-
-            orderItemRepository.save(orderItem);
-            orderItems.add(orderItem);
-        }
-        return orderItems;
     }
 }
