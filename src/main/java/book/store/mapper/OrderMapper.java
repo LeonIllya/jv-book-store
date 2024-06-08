@@ -26,8 +26,6 @@ public interface OrderMapper {
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "user", source = "shoppingCart.user")
-    @Mapping(target = "status", constant = "PENDING")
-    @Mapping(target = "orderDate", expression = "java(java.time.LocalDateTime.now())")
     @Mapping(target = "shippingAddress", source = "requestDto.shippingAddress")
     @Mapping(target = "orderItems", source = "shoppingCart.cartItems",
             qualifiedByName = "mapCartItems")
