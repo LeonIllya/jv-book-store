@@ -13,6 +13,7 @@ import jakarta.validation.constraints.Positive;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
+
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
@@ -46,7 +47,7 @@ public class OrderController {
     public List<OrderDto> getOrderHistory(Authentication authentication, Pageable pageable) {
         User user = getUser(authentication);
         return orderService.getOrderHistory(user.getId(), pageable);
-    }
+
 
     @GetMapping("/{id}")
     @PreAuthorize("hasRole('ROLE_USER')")
