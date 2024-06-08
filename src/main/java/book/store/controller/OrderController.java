@@ -12,6 +12,11 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+<<<<<<< HEAD
+=======
+import org.springframework.data.domain.Pageable;
+
+>>>>>>> origin/main
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
@@ -42,9 +47,9 @@ public class OrderController {
     @GetMapping
     @PreAuthorize("hasRole('ROLE_USER')")
     @Operation(summary = "Get orders", description = "Get all orders")
-    public List<OrderDto> getOrderHistory(Authentication authentication) {
+    public List<OrderDto> getOrderHistory(Authentication authentication, Pageable pageable) {
         User user = getUser(authentication);
-        return orderService.getOrderHistory(user.getId());
+        return orderService.getOrderHistory(user.getId(), pageable);
     }
 
     @GetMapping("/{id}")
