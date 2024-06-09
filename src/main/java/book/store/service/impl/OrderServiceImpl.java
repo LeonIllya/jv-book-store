@@ -80,7 +80,7 @@ public class OrderServiceImpl implements OrderService {
                     userId)
                 .orElseThrow(() -> new EntityNotFoundException(
                     "Can`t find an order item by id: " + itemId));
-      
+
         return orderItemMapper.toDto(orderItem);
     }
 
