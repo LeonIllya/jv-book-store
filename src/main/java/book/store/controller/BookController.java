@@ -29,18 +29,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class BookController {
     private final BookService bookService;
 
-    @GetMapping
-    @Operation(summary = "Get all books", description = "Get a list of all books")
-    public List<BookDto> getAll(Pageable pageable) {
-        return bookService.getAll(pageable);
-    }
-
-    @GetMapping("/{id}")
-    @Operation(summary = "Get book by id", description = "Get book by id")
-    public BookDto getBookId(@PathVariable Long id) {
-        return bookService.getBookById(id);
-    }
-
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     @Operation(summary = "Create new book", description = "Create new book")
@@ -62,6 +50,18 @@ public class BookController {
     @Operation(summary = "Delete book by id", description = "Delete book by id")
     public void deleteBook(@PathVariable Long id) {
         bookService.deleteById(id);
+    }
+
+    @GetMapping("/{id}")
+    @Operation(summary = "Get book by id", description = "Get book by id")
+    public BookDto getBookId(@PathVariable Long id) {
+        return bookService.getBookById(id);
+    }
+
+    @GetMapping
+    @Operation(summary = "Get all books", description = "Get a list of all books")
+    public List<BookDto> getAll(Pageable pageable) {
+        return bookService.getAll(pageable);
     }
 
     @GetMapping("/search")

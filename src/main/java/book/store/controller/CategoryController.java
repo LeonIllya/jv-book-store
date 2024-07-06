@@ -31,23 +31,11 @@ public class CategoryController {
     private final CategoryService categoryService;
     private final BookService bookService;
 
-    @GetMapping
-    @Operation(summary = "Get all categories", description = "Get a list of categories")
-    public List<CategoryDto> getAll(Pageable pageable) {
-        return categoryService.findAll(pageable);
-    }
-
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     @Operation(summary = "Create new category", description = "Create new category")
     public CategoryDto createCategory(@RequestBody @Valid CreateCategoryRequestDto requestDto) {
         return categoryService.save(requestDto);
-    }
-
-    @GetMapping("/{id}")
-    @Operation(summary = "Get category by id", description = "Get category by id")
-    public CategoryDto getCategoryById(@PathVariable Long id) {
-        return categoryService.getCategoryById(id);
     }
 
     @PreAuthorize("hasRole('ADMIN')")
@@ -64,6 +52,18 @@ public class CategoryController {
     @Operation(summary = "Delete category by id", description = "Delete category by id")
     public void deleteCategory(@PathVariable Long id) {
         categoryService.deleteById(id);
+    }
+
+    @GetMapping("/{id}")
+    @Operation(summary = "Get category by id", description = "Get category by id")
+    public CategoryDto getCategoryById(@PathVariable Long id) {
+        return categoryService.getCategoryById(id);
+    }
+
+    @GetMapping
+    @Operation(summary = "Get all categories", description = "Get a list of categories")
+    public List<CategoryDto> getAll(Pageable pageable) {
+        return categoryService.findAll(pageable);
     }
 
     @GetMapping("/{id}/books")
