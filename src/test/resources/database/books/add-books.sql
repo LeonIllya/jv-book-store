@@ -9,14 +9,14 @@ VALUES (1, 'Book Title 1', 'Author 1', 'ISBN-00001', 5.99, 'Description for Book
        (4, 'Book Title 4', 'Author 4', 'ISBN-00004', 8.99, 'Description for Book 4', 'coverImage4.jpg'),
        (5, 'Book Title 5', 'Author 5', 'ISBN-00005', 9.99, 'Description for Book 5', 'coverImage5.jpg');
 
-INSERT INTO books_categories (book_id, categories_id)
+INSERT INTO books_categories (book_id, category_id)
 SELECT id, 1
 FROM books
 WHERE isbn IN (
     'ISBN-00001', 'ISBN-00003', 'ISBN-00005'
 );
 
-INSERT INTO books_categories (book_id, categories_id)
+INSERT INTO books_categories (book_id, category_id)
 SELECT id, 2
 FROM books
 WHERE isbn IN (

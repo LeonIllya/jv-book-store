@@ -3,7 +3,6 @@ package book.store.tests.repository;
 import book.store.model.Book;
 import book.store.repository.book.BookRepository;
 import java.util.List;
-import javax.sql.DataSource;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -17,8 +16,6 @@ import org.springframework.test.context.jdbc.Sql;
 public class BookRepositoryTest {
     @Autowired
     private BookRepository bookRepository;
-    @Autowired
-    private DataSource dataSource;
 
     @Test
     @Sql(scripts = "classpath:database/books/add-books.sql",
@@ -30,8 +27,9 @@ public class BookRepositoryTest {
         Long categoryId = 1L;
         List<Book> actual = bookRepository.findAllByCategoryId(categoryId);
 
-        Assertions.assertEquals(2, actual.size());
-        Assertions.assertEquals("Author C", actual.get(0).getAuthor());
-        Assertions.assertEquals("Author A", actual.get(1).getAuthor());
+        Assertions.assertEquals(3, actual.size());
+        Assertions.assertEquals("Author 1", actual.get(0).getAuthor());
+        Assertions.assertEquals("Author 3", actual.get(1).getAuthor());
+        Assertions.assertEquals("Author 5", actual.get(2).getAuthor());
     }
 }
