@@ -32,6 +32,7 @@ public class CategoryController {
     private final BookService bookService;
 
     @PreAuthorize("hasRole('ADMIN')")
+    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     @Operation(summary = "Create new category", description = "Create new category")
     public CategoryDto createCategory(@RequestBody @Valid CreateCategoryRequestDto requestDto) {
@@ -39,6 +40,7 @@ public class CategoryController {
     }
 
     @PreAuthorize("hasRole('ADMIN')")
+    @ResponseStatus(HttpStatus.OK)
     @PutMapping("/{id}")
     @Operation(summary = "Update category by id", description = "Update category by id")
     public CategoryDto updateCategory(@PathVariable Long id,

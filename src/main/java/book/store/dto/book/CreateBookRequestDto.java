@@ -5,7 +5,6 @@ import jakarta.validation.constraints.Positive;
 import java.math.BigDecimal;
 import java.util.Set;
 import lombok.Data;
-import org.hibernate.validator.constraints.ISBN;
 import org.hibernate.validator.constraints.Length;
 
 @Data
@@ -16,7 +15,6 @@ public class CreateBookRequestDto {
     @NotBlank(message = "Please write the author of the book ")
     private String author;
     @NotBlank
-    @ISBN
     private String isbn;
     @Positive
     private BigDecimal price;

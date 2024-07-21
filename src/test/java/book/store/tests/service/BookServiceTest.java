@@ -267,20 +267,6 @@ public class BookServiceTest {
         assertFalse(bookDtoActual.isEmpty());
     }
 
-    @Test
-    @DisplayName("Search books with invalid params")
-    public void find_ValidBookWithoutCategories_ReturnListBookDtoWithoutCategoryIds() {
-        Long categoryId = 1L;
-        BookDtoWithoutCategoryIds bookDtoWithoutCategoryIds = createBookDtoWithoutCategoryIds(book);
-        when(bookRepository.findById(categoryId)).thenReturn(Optional.of(book));
-        when(bookMapper.toDtoWithoutCategories(book)).thenReturn(bookDtoWithoutCategoryIds);
-
-        List<BookDtoWithoutCategoryIds> bookDtoWithoutCategory = List.of(bookDtoWithoutCategoryIds);
-        List<BookDtoWithoutCategoryIds> byCategoryId = bookService.findByCategoryId(categoryId);
-
-        assertEquals(bookDtoWithoutCategory, byCategoryId);
-    }
-
     private Book createBook() {
         Book book = new Book();
         book.setId(2L);

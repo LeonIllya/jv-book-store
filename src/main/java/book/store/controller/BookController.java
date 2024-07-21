@@ -46,7 +46,7 @@ public class BookController {
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ResponseStatus(HttpStatus.OK)
     @DeleteMapping("/{id}")
     @Operation(summary = "Delete book by id", description = "Delete book by id")
     public void deleteBook(@PathVariable Long id) {
@@ -54,6 +54,7 @@ public class BookController {
     }
 
     @GetMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "Get book by id", description = "Get book by id")
     public BookDto getBookId(@PathVariable Long id) {
         return bookService.getBookById(id);
