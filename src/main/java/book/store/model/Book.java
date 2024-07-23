@@ -9,6 +9,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.Table;
 import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
@@ -22,7 +23,8 @@ import org.hibernate.annotations.SQLRestriction;
 @Getter
 @Setter
 @EqualsAndHashCode(of = {"id"})
-@Entity(name = "books")
+@Entity
+@Table(name = "books")
 @SQLDelete(sql = "UPDATE books SET is_deleted = true WHERE id=?")
 @SQLRestriction(value = "is_deleted = false")
 public class Book {
