@@ -48,7 +48,7 @@ public class Order {
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<OrderItem> orderItems;
     @Column(nullable = false)
-    private boolean isDeleted;
+    private boolean isDeleted = false;
 
     public enum Status {
         PENDING,
