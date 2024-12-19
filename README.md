@@ -11,6 +11,7 @@ This project is built using a robust technology stack designed to ensure
 reliability, scalability, and security. Here’s a brief overview of 
 the technologies that power BookStore:
 
+- **Java:** 17 version
 - **Spring Boot:** Simplifies the development and deployment process.
 - **Spring Security:** Provides comprehensive security for your application.
 - **Spring Data JPA:** Manages and accesses data with ease.
@@ -23,6 +24,44 @@ the technologies that power BookStore:
 - **Docker:** Streamlines development and deployment in isolated environments.
 - **Docker Testcontainers:** Facilitates integration testing with a MySQL container.
 ___
+## How to Run the Project
+___
+
+### Prerequisites:
+- **Java 17** or higher
+- **Maven** for dependency management
+- **Docker** and **Docker Compose** for setting up the environment
+
+### Steps to Launch Application:
+
+1. **Clone the repository:**
+   ```bash
+   git clone git@github.com:your-username/jv-book-store.git
+   cd jv-book-store
+   
+2. **Set up the environment by creating a ```.env``` file with the following variables:**
+   ```
+   MYSQLDB_USER=<your_username>
+   MYSQLDB_PASSWORD=<your_password>
+   MYSQLDB_DATABASE=<your_database_name>
+   MYSQLDB_LOCAL_PORT=<your_local_port>
+   MYSQLDB_DOCKER_PORT=<your_docker_port>
+   
+   SPRING_LOCAL_PORT=<your_spring_local_port>
+   SPRING_DOCKER_PORT=<your_spring_docker_port>
+   DEBUG_PORT=<your_debug_port>
+    ```
+3. **Build and start the containers using Docker Compose:**
+    ```
+    docker-compose up --build
+   ```
+4. The application will be accessible at ```http://localhost:<YOUR_PORT>/api```.
+
+### Running Tests:
+   To run unit and integration tests using Testcontainers, execute:
+   ```
+   mvn clean test
+   ```
 
 ## 💻 Project endpoints:
 ___
@@ -93,13 +132,6 @@ Here are some ideas for enhancing BookStore:
 - Community Features: Add forums or book clubs to engage users more deeply.
 
 ---
-## 💪 Challenges and Solutions
+## Short video of the project in action
 
-Understanding the project's architecture: this was my first experience working on a project of this scale. 
-It was challenging to bring all the elements together, grasp the connections between them, 
-and integrate them effectively. However, through persistent effort, extensive research, 
-and consultations with experienced professionals, I was able to develop an appropriate structure. 
-Additionally, working with Spring Security was a particularly tough challenge. Despite its complexity, 
-I managed to understand its configuration for application integration. 
-Although it was difficult, I must admit that creating this project was an incredibly rewarding experience. 
-I'm looking forward to further opportunities to practice and refine my skills.
+[![project work](https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR824tdHrx6ANj1OF6TE59RZUrnVBpwe4vcZA&s)](https://www.loom.com/share/5b09a297332a4661bdd2e2b1d1484b05?sid=860c54d7-bac4-4354-9470-888949539ed8)
