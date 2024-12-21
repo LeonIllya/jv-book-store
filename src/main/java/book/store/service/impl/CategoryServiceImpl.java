@@ -19,11 +19,26 @@ public class CategoryServiceImpl implements CategoryService {
     private final CategoryMapper categoryMapper;
 
     @Override
-    public List<CategoryDto> findAll(Pageable pageable) {
-        return categoryRepository.findAll(pageable)
-            .stream()
-            .map(categoryMapper::toDto)
-            .toList();
+    public CategoryDto save(CreateCategoryRequestDto categoryDto) {
+        Category entity = categoryMapper.toEntity(categoryDto);
+        categoryRepository.save(entity);
+        return categoryMapper.toDto(entity);
+    }
+
+    @Override
+    public CategoryDto updateById(Long id, CreateCategoryRequestDto requestDto) {
+        Category category = categoryRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException(
+                    "Can`t find a category by id: " + id));
+        category.setId(id);
+        category.setName(requestDto.getName());
+        category.setDescription(requestDto.getDescription());
+        return categoryMapper.toDto(categoryRepository.save(category));
+    }
+
+    @Override
+    public void deleteById(Long id) {
+        categoryRepository.deleteById(id);
     }
 
     @Override
@@ -36,25 +51,10 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public CategoryDto save(CreateCategoryRequestDto categoryDto) {
-        Category entity = categoryMapper.toEntity(categoryDto);
-        categoryRepository.save(entity);
-        return categoryMapper.toDto(entity);
-    }
-
-    @Override
-    public CategoryDto updateById(Long id, CreateCategoryRequestDto requestDto) {
-        Category category = categoryRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException(
-                        "Can`t find a category by id: " + id));
-        category.setId(id);
-        category.setName(requestDto.getName());
-        category.setDescription(requestDto.getDescription());
-        return categoryMapper.toDto(categoryRepository.save(category));
-    }
-
-    @Override
-    public void deleteById(Long id) {
-        categoryRepository.deleteById(id);
+    public List<CategoryDto> findAll(Pageable pageable) {
+        return categoryRepository.findAll(pageable)
+            .stream()
+            .map(categoryMapper::toDto)
+            .toList();
     }
 }

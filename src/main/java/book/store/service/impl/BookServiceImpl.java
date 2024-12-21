@@ -31,22 +31,6 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public BookDto getBookById(Long id) {
-        Book book = bookRepository.findById(id).orElseThrow(
-                () -> new EntityNotFoundException("Can`t find a book by id: " + id)
-        );
-        return bookMapper.toDto(book);
-    }
-
-    @Override
-    public List<BookDto> getAll(Pageable pageable) {
-        return bookRepository.findAll(pageable)
-                .stream()
-                .map(bookMapper::toDto)
-                .toList();
-    }
-
-    @Override
     public BookDto updateById(Long id, CreateBookRequestDto requestDto) {
         Book book = bookRepository.findById(id).orElseThrow(()
                 -> new EntityNotFoundException("Can't find a book by id: " + id));
@@ -68,18 +52,34 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public List<BookDto> search(BookSearchParametersDto params) {
-        Specification<Book> bookSpecification = bookSpecificationBuilder.build(params);
-        return bookRepository.findAll(bookSpecification)
-                .stream()
-                .map(bookMapper::toDto)
-                .toList();
+    public BookDto getBookById(Long id) {
+        Book book = bookRepository.findById(id).orElseThrow(
+                () -> new EntityNotFoundException("Can`t find a book by id: " + id)
+        );
+        return bookMapper.toDto(book);
+    }
+
+    @Override
+    public List<BookDto> getAll(Pageable pageable) {
+        return bookRepository.findAll(pageable)
+            .stream()
+            .map(bookMapper::toDto)
+            .toList();
     }
 
     @Override
     public List<BookDtoWithoutCategoryIds> findByCategoryId(Long id) {
         return bookRepository.findAllByCategoryId(id).stream()
             .map(bookMapper::toDtoWithoutCategories)
+            .toList();
+    }
+
+    @Override
+    public List<BookDto> search(BookSearchParametersDto params) {
+        Specification<Book> bookSpecification = bookSpecificationBuilder.build(params);
+        return bookRepository.findAll(bookSpecification)
+            .stream()
+            .map(bookMapper::toDto)
             .toList();
     }
 }

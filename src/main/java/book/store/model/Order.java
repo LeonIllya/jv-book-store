@@ -19,6 +19,8 @@ import java.util.Set;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 
@@ -35,6 +37,7 @@ public class Order {
     private Long id;
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(nullable = false)
+    @Fetch(FetchMode.JOIN)
     private User user;
     @Column(nullable = false, columnDefinition = "varchar")
     @Enumerated(EnumType.STRING)
@@ -46,6 +49,7 @@ public class Order {
     @Column(nullable = false)
     private String shippingAddress;
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Fetch(FetchMode.JOIN)
     private Set<OrderItem> orderItems;
     @Column(nullable = false)
     private boolean isDeleted = false;

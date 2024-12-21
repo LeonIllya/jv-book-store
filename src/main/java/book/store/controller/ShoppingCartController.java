@@ -5,8 +5,8 @@ import book.store.dto.cartitem.CartItemRequestDto;
 import book.store.dto.cartitem.UpdateCartItemDto;
 import book.store.dto.shoppingcart.ShoppingCartDto;
 import book.store.model.User;
-import book.store.service.CartItemService;
 import book.store.service.ShoppingCartService;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
@@ -32,47 +32,54 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/cart")
 public class ShoppingCartController {
     private final ShoppingCartService shoppingCartService;
-    private final CartItemService cartItemService;
 
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     @GetMapping
-    @PreAuthorize("hasRole('USER')")
+    @Operation(summary = "Get an user's cart",
+            description = "Receive a certain user's shopping cart")
     public ShoppingCartDto getShoppingCart(Authentication authentication) {
         User user = getUser(authentication);
         return shoppingCartService.getShoppingCart(user.getId());
     }
 
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     @PostMapping
-    @PreAuthorize("hasRole('USER')")
-    public ShoppingCartDto addBook(@RequestBody @Valid CartItemRequestDto cartItemRequestDto,
+    @Operation(summary = "Add cart item to the shopping cart",
+            description = "Add cart item to the shopping cart")
+    public ShoppingCartDto addCartItem(@RequestBody @Valid CartItemRequestDto cartItemRequestDto,
                                    Authentication authentication) {
         User user = getUser(authentication);
-        return shoppingCartService.addBookInShoppingCart(user.getId(), cartItemRequestDto);
+        return shoppingCartService.addCartItemInShoppingCart(user.getId(), cartItemRequestDto);
     }
 
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     @PutMapping("/cart-items/{cartItemId}")
-    @PreAuthorize("hasRole('USER')")
-    public ShoppingCartDto updateQuantity(Authentication authentication,
+    @Operation(summary = "Update an item cart",
+            description = "Update an item cart in the shopping cart")
+    public ShoppingCartDto updateCartItemQuantity(Authentication authentication,
                                           @PathVariable @Positive Long cartItemId,
                                           @RequestBody @Valid UpdateCartItemDto item) {
         User user = getUser(authentication);
-        return shoppingCartService.updateQuantity(user.getId(), cartItemId, item);
+        return shoppingCartService.updateCartItemQuantity(user.getId(), cartItemId, item);
     }
 
-    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     @DeleteMapping("/cart-items/{cartItemId}")
-    @PreAuthorize("hasRole('USER')")
-    public void deleteBookById(Authentication authentication,
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @Operation(summary = "Delete a cart item",
+            description = "Delete a cart item in the shopping cart")
+    public void deleteCartItemById(Authentication authentication,
                                @PathVariable @Positive Long cartItemId) {
         User user = getUser(authentication);
-        shoppingCartService.deleteBookById(cartItemId, user.getId());
+        shoppingCartService.deleteCartItemById(cartItemId, user.getId());
     }
 
     @GetMapping("/cart-items/{cartItemId}")
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public CartItemDto getCartItemByCartId(Authentication authentication,
                                            @PathVariable @Positive Long cartItemId) {
         User user = getUser(authentication);
-        return cartItemService.getCartItemById(cartItemId, user.getId());
+        return shoppingCartService.getCartItemById(cartItemId, user.getId());
     }
 
     private User getUser(Authentication authentication) {

@@ -132,6 +132,8 @@ Here are some ideas for enhancing BookStore:
 - Community Features: Add forums or book clubs to engage users more deeply.
 
 ---
-## Short video of the project in action
+## 🎥 Video Demonstration
+Watch a 2-4 minute demo of BookStore in action.
 
 [![project work](https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR824tdHrx6ANj1OF6TE59RZUrnVBpwe4vcZA&s)](https://www.loom.com/share/5b09a297332a4661bdd2e2b1d1484b05?sid=860c54d7-bac4-4354-9470-888949539ed8)
+___

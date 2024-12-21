@@ -7,7 +7,6 @@ import book.store.dto.orderitem.OrderItemDto;
 import book.store.exception.EntityNotFoundException;
 import book.store.mapper.OrderItemMapper;
 import book.store.mapper.OrderMapper;
-import book.store.model.CartItem;
 import book.store.model.Order;
 import book.store.model.OrderItem;
 import book.store.model.ShoppingCart;
@@ -33,23 +32,23 @@ public class OrderServiceImpl implements OrderService {
 
     @Transactional
     @Override
-    public OrderDto getOrderByPlace(Long userId, PlaceOrderRequestDto placeOrderRequestDto) {
+    public OrderDto createOrderByPlace(Long userId, PlaceOrderRequestDto placeOrderRequestDto) {
         ShoppingCart shoppingCart = getShoppingCartByUserId(userId);
 
-        BigDecimal total = null;
-        for (CartItem cartItem : shoppingCart.getCartItems()) {
-            total.add(cartItem.getBook().getPrice()
-                    .multiply(BigDecimal.valueOf(cartItem.getQuantity())));
-        }
-        Order order = orderMapper.createOrder(shoppingCart, placeOrderRequestDto);
-        shoppingCartRepository.delete(shoppingCart);
+        BigDecimal totalCost = shoppingCart.getCartItems().stream()
+                .map(cartItem -> cartItem.getBook().getPrice()
+                        .multiply(BigDecimal.valueOf(cartItem.getQuantity())))
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
 
+        Order order = orderMapper.createOrder(shoppingCart, placeOrderRequestDto);
+        order.setTotal(totalCost);
+        orderRepository.save(order);
         return orderMapper.toDto(order);
     }
 
     @Override
     public List<OrderDto> getOrderHistory(Long userId, Pageable pageable) {
-        List<Order> ordersByUserId = orderRepository.findOrdersByUserId(userId, pageable);
+        List<Order> ordersByUserId = orderRepository.findByUserId(userId, pageable);
         return ordersByUserId.stream()
                 .map(orderMapper::toDto)
                 .toList();
@@ -85,7 +84,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     private Order getOrderById(Long orderId, Long userId) {
-        return orderRepository.findOrderByOrderIdAndUserId(orderId, userId)
+        return orderRepository.findByIdAndUserId(orderId, userId)
                 .orElseThrow(() -> new EntityNotFoundException(
                     "Can`t find an order by order id: " + orderId));
     }
