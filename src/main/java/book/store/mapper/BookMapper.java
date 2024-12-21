@@ -10,12 +10,14 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 
-@Mapper(config = MapperConfig.class)
+@Mapper(config = MapperConfig.class, uses = CategoryMapper.class)
 public interface BookMapper {
     BookDto toDto(Book book);
 
+    @Mapping(target = "categories", source = "categoryIds", qualifiedByName = "categoriesById")
     Book toModel(CreateBookRequestDto requestDto);
 
     BookDtoWithoutCategoryIds toDtoWithoutCategories(Book book);

@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public interface OrderService {
-    OrderDto getOrderByPlace(Long userId, PlaceOrderRequestDto placeOrderRequestDto);
+    OrderDto createOrderByPlace(Long userId, PlaceOrderRequestDto placeOrderRequestDto);
 
     List<OrderDto> getOrderHistory(Long userId, Pageable pageable);
 

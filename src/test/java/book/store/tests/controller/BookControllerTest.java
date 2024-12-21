@@ -146,7 +146,7 @@ public class BookControllerTest {
         MvcResult result = mockMvc.perform(delete("/books/{id}", id)
                     .content(jsonRequest)
                     .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
+                .andExpect(status().isNoContent())
                 .andReturn();
 
     }
@@ -210,7 +210,7 @@ public class BookControllerTest {
 
     @Test
     @WithMockUser(username = "user", roles = {"USER"})
-    @DisplayName("Search book by id from database")
+    @DisplayName("Search book by params from database")
     void searchBooks_validParameters_returnListOfBooks() throws Exception {
         List<BookDto> listOfBooksByParametersExpected = getListOfBooksByParameters();
 
@@ -235,6 +235,7 @@ public class BookControllerTest {
         requestDto.setPrice(BigDecimal.valueOf(29.99));
         requestDto.setDescription("Yet another sample book description.");
         requestDto.setCoverImage("http://example.com/cover3.jpg");
+        requestDto.setCategoryIds(Set.of(1L,2L));
         return requestDto;
     }
 

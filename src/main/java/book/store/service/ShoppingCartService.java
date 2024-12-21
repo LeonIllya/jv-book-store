@@ -1,17 +1,22 @@
 package book.store.service;
 
+import book.store.dto.cartitem.CartItemDto;
 import book.store.dto.cartitem.CartItemRequestDto;
 import book.store.dto.cartitem.UpdateCartItemDto;
 import book.store.dto.shoppingcart.ShoppingCartDto;
-import jakarta.validation.constraints.Positive;
+import book.store.model.User;
 
 public interface ShoppingCartService {
-    ShoppingCartDto addBookInShoppingCart(Long userId, CartItemRequestDto requestDto);
+    ShoppingCartDto addCartItemInShoppingCart(Long userId, CartItemRequestDto requestDto);
 
-    ShoppingCartDto updateQuantity(Long userId, @Positive Long cartItemId,
+    ShoppingCartDto updateCartItemQuantity(Long userId, Long cartItemId,
                                     UpdateCartItemDto cartItemDto);
 
-    void deleteBookById(@Positive Long cartItemId, Long userId);
+    void deleteCartItemById(Long cartItemId, Long userId);
 
     ShoppingCartDto getShoppingCart(Long userId);
+
+    void createShoppingCartForUser(User user);
+
+    CartItemDto getCartItemById(Long cartItemId, Long userId);
 }

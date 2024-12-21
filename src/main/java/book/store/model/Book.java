@@ -16,13 +16,14 @@ import java.util.Set;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
-import org.apache.commons.lang3.builder.ToStringExclude;
+import lombok.ToString;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 
 @Getter
 @Setter
-@EqualsAndHashCode(of = {"id"})
 @Entity
 @Table(name = "books")
 @SQLDelete(sql = "UPDATE books SET is_deleted = true WHERE id=?")
@@ -41,7 +42,9 @@ public class Book {
     private BigDecimal price;
     private String description;
     private String coverImage;
-    @ToStringExclude
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @Fetch(FetchMode.JOIN)
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "books_categories",
